@@ -1,0 +1,9 @@
+{% extends "base.html"%}
+{%block content %}
+
+<h1>{{ user.username }}</h1>
+<h2>Posts</h2>
+{%for post in posts %}
+<h3 style="display:inline">{{post.user.username }}</h3> says that <h4 style="display:inline">{{ post.body }}</h4> <br>
+{% endfor %}
+{% endblock %}
