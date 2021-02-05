@@ -1,0 +1,44 @@
+{% extends "base.html"%}
+{% block content %}
+
+<table>
+    <tr>
+        <td><img src="{{user.avatar(128)}}"></td>
+        <td><h1>User : {{user.username}}</h1>
+            {% if user.last_seen %}<p>Last seen : {{user.last_seen}} </p>{%endif%}
+            {% if user.about_me %}<p> About me  : {{user.about_me}}  </p>{%endif%}
+            {% if current_user==user%}
+                <a href="{{url_for('edit_profile')}}">Edit Profile</a>
+
+            {% elif not current_user.is_following(user) %}
+                <form method="post" action="{{url_for('follow',username=user.username)}}">
+                <p>{{form.submit(value='Follow')}}</p>
+                </form>
+            {%else%}
+                <form method="post" action="{{url_for('unfollow',username=user.username)}}">
+                <p>{{form.submit(value='Unfollow')}}</p>
+                </form>
+            {% endif %}
+
+        </td>
+    </tr>
+</table>
+<hr>
+<h2>Posts</h2>
+{%if posts != [] %}
+{% for post in posts %}
+  {% include "_post.html" %}
+{% endfor %}
+
+<p>
+    {% if prev_url %}<a href="{{prev_url}}">Previous</a> {% else %}>>>{% endif %}
+      -----
+     {% if next_url %}<a href="{{next_url}}">Next</a> {% else %}<<<{% endif %}
+
+</p>
+
+
+{% else %}
+<p>No posts from {{user.username}} yet...</p>
+{% endif %}
+{% endblock %}
